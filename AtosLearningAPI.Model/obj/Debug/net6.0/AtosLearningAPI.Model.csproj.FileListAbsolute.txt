@@ -1,0 +1,12 @@
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/bin/Debug/net6.0/AtosLearningAPI.Model.deps.json
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/bin/Debug/net6.0/AtosLearningAPI.Model.dll
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/bin/Debug/net6.0/AtosLearningAPI.Model.pdb
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/AtosLearningAPI.Model.csproj.AssemblyReference.cache
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/AtosLearningAPI.Model.GeneratedMSBuildEditorConfig.editorconfig
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/AtosLearningAPI.Model.AssemblyInfoInputs.cache
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/AtosLearningAPI.Model.AssemblyInfo.cs
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/AtosLearningAPI.Model.csproj.CoreCompileInputs.cache
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/AtosLearningAPI.Model.dll
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/refint/AtosLearningAPI.Model.dll
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/AtosLearningAPI.Model.pdb
+/Users/santiagoquihui/Developer/TC2005B/Taller REST/AtosLearningAPI/AtosLearningAPI.Model/obj/Debug/net6.0/ref/AtosLearningAPI.Model.dll

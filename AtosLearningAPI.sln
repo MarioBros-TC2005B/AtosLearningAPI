@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtosLearningAPI", "AtosLearningAPI\AtosLearningAPI.csproj", "{9C294F8A-7A4E-4B28-83EF-1814452B0BEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtosLearningAPI.Model", "AtosLearningAPI.Model\AtosLearningAPI.Model.csproj", "{49B8486A-06E6-4744-A8BC-3CB6B5F53606}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtosLearningAPI.Data", "AtosLearningAPI.Data\AtosLearningAPI.Data.csproj", "{34FD5D0C-37A0-4031-8764-D96B919E5F55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C294F8A-7A4E-4B28-83EF-1814452B0BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C294F8A-7A4E-4B28-83EF-1814452B0BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C294F8A-7A4E-4B28-83EF-1814452B0BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C294F8A-7A4E-4B28-83EF-1814452B0BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49B8486A-06E6-4744-A8BC-3CB6B5F53606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49B8486A-06E6-4744-A8BC-3CB6B5F53606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49B8486A-06E6-4744-A8BC-3CB6B5F53606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49B8486A-06E6-4744-A8BC-3CB6B5F53606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34FD5D0C-37A0-4031-8764-D96B919E5F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34FD5D0C-37A0-4031-8764-D96B919E5F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34FD5D0C-37A0-4031-8764-D96B919E5F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34FD5D0C-37A0-4031-8764-D96B919E5F55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
