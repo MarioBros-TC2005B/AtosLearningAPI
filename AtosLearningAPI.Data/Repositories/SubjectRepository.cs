@@ -1,5 +1,6 @@
 using System.Data;
 using AtosLearningAPI.Model;
+using Dapper;
 using MySql.Data.MySqlClient;
 
 namespace AtosLearningAPI.Data.Repositories;
@@ -16,94 +17,16 @@ public class SubjectRepository : ISubjectRepository
     
     protected MySqlConnection GetConnection() => new MySqlConnection(_mySQLConfiguration.ConnectionString);
     
-    public Task<IEnumerable<Subject>> GetAllSubjects()
+    public async Task<IEnumerable<Subject>> GetAllSubjects()
     {
         var db = GetConnection();
-        db.Open();
-
-        MySqlCommand cmd = new MySqlCommand();
-
-        cmd.Connection = db;
-        //cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "SELECT * FROM Subjects";
-        
-        List<Subject> subjects = new List<Subject>();
-        using (var reader = cmd.ExecuteReader())
-        {
-            while (reader.Read())
-            {
-                Subject subject = new Subject();
-                subject.Id = Convert.ToInt32(reader["subject_id"]);
-                subject.Name = reader["subject_name"].ToString();
-                subject.TeacherId = Convert.ToInt32(reader["teacher_id"].ToString());
-                subject.CourseId = Convert.ToInt32(reader["course_id"].ToString());
-                subjects.Add(subject);
-            }
-        } 
-        
-        db.Dispose();
-        
-        return Task.FromResult<IEnumerable<Subject>>(subjects);
-
-    }
-
-    public Task<Subject> GetSubjectById(int id)
-    {
-        var db = GetConnection();
+        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId FROM Subjects";
 
         try
         {
             db.Open();
-        
-            MySqlCommand cmd = new MySqlCommand();
-        
-        
-            cmd.Connection = db;
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "SELECT * FROM Subjects WHERE subject_id = @id";
-            cmd.Parameters.AddWithValue("@id", id);
-        
-            Subject subject = new Subject();
-            using (var reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    subject.Id = Convert.ToInt32(reader["subject_id"]);
-                    subject.Name = reader["subject_name"].ToString();
-                    subject.TeacherId = Convert.ToInt32(reader["teacher_id"].ToString());
-                    subject.CourseId = Convert.ToInt32(reader["course_id"].ToString());
-                }
-            }
-            db.Dispose();
-            return Task.FromResult(subject);
-        } catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-
-    public Task<bool> AddSubject(Subject subject)
-    {
-        var db = GetConnection();
-        
-
-        try
-        { 
-            db.Open();
-        
-            MySqlCommand cmd = new MySqlCommand();
-        
-            cmd.Connection = db;
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO Subjects (subject_name, teacher_id, course_id) VALUES (@name, @teacherId, @courseId)";
-            cmd.Parameters.AddWithValue("@name", subject.Name);
-            cmd.Parameters.AddWithValue("@teacherId", subject.TeacherId);
-            cmd.Parameters.AddWithValue("@courseId", subject.CourseId);
-            cmd.ExecuteNonQuery();
-            db.Dispose();
-        
-            return Task.FromResult(true);
+            var subjects = await db.QueryAsync<Subject>(command);
+            return subjects.ToList();
         }
         catch (Exception e)
         {
@@ -113,27 +36,21 @@ public class SubjectRepository : ISubjectRepository
 
     }
 
-    public Task<bool> UpdateSubject(Subject subject)
+    public async Task<Subject> GetSubjectById(int id)
     {
         var db = GetConnection();
 
+        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId FROM Subjects WHERE subject_id = @id";
+        
         try
         {
             db.Open();
-        
-            MySqlCommand cmd = new MySqlCommand();
-        
-            cmd.Connection = db;
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "UPDATE Subjects SET subject_name = @name, teacher_id = @teacherId, course_id = @courseId WHERE subject_id = @id";
-            cmd.Parameters.AddWithValue("@id", subject.Id);
-            cmd.Parameters.AddWithValue("@name", subject.Name);
-            cmd.Parameters.AddWithValue("@teacherId", subject.TeacherId);
-            cmd.Parameters.AddWithValue("@courseId", subject.CourseId);
-            cmd.ExecuteNonQuery();
-            db.Dispose();
-        
-            return Task.FromResult(true);
+            var result = await db.QueryAsync<Subject>(command, new {id});
+            var subject = result.FirstOrDefault();
+            if (subject == null)
+                throw new Exception("Subject not found");
+            
+            return subject;
         }
         catch (Exception e)
         {
@@ -142,24 +59,37 @@ public class SubjectRepository : ISubjectRepository
         }
     }
 
-    public Task<bool> DeleteSubject(int id)
+    public async Task<bool> AddSubject(Subject subject)
     {
         var db = GetConnection();
+
+        var command = "INSERT INTO Subjects (subject_name, teacher_id, course_id) VALUES (@name, @teacherId, @courseId)";
         
         try
         {
             db.Open();
+            await db.ExecuteAsync(command, new {name = subject.Name, teacherId = subject.TeacherId, courseId = subject.CourseId});
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+    }
+
+    public async Task<bool> UpdateSubject(Subject subject)
+    {
+        var db = GetConnection();
         
-            MySqlCommand cmd = new MySqlCommand();
-        
-            cmd.Connection = db;
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "DELETE FROM Subjects WHERE subject_id = @id";
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.ExecuteNonQuery();
-            db.Dispose();
-        
-            return Task.FromResult(true);
+        var command = "UPDATE Subjects SET subject_name = @name, teacher_id = @teacherId, course_id = @courseId WHERE subject_id = @id";
+
+        try
+        {
+            db.Open();
+            await db.ExecuteAsync(command, new {name = subject.Name, teacherId = subject.TeacherId, courseId = subject.CourseId, id = subject.Id});
+            return true;
         }
         catch (Exception e)
         {
@@ -167,4 +97,47 @@ public class SubjectRepository : ISubjectRepository
             throw;
         }
     }
+
+    public async Task<bool> DeleteSubject(int id)
+    {
+        var db = GetConnection();
+        
+        var command = "DELETE FROM Subjects WHERE subject_id = @id";
+        
+        try
+        {
+            db.Open();
+            await db.ExecuteAsync(command, new {id});
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task<IEnumerable<Subject>> GetTeacherSubjects(string teacherId)
+    {
+        var db = GetConnection();
+        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId FROM Subjects WHERE teacher_id = @teacherId";
+        
+        try
+        {
+            db.Open();
+            var subjects = await db.QueryAsync<Subject>(command, new {teacherId});
+            var subjectList = subjects.ToList();
+            if (subjectList.Count == 0)
+                throw new Exception("No subjects found for this teacher");
+            
+            return subjectList;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
+    
 }

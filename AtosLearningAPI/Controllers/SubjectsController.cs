@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using AtosLearningAPI.Data.Repositories;
@@ -63,5 +64,11 @@ public class SubjectsController : ControllerBase
         await _subjectRepository.DeleteSubject(id);
 
         return NoContent();
+    }
+    
+    [HttpGet("teacher/{teacherId}")]
+    public async Task<IActionResult> GetTeacherSubjects(string teacherId)
+    {
+        return Ok(await _subjectRepository.GetTeacherSubjects(teacherId));
     }
 }

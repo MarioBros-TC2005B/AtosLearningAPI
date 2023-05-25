@@ -8,4 +8,5 @@ public interface ISubjectRepository
     Task<bool> AddSubject(Subject subject);
     Task<bool> UpdateSubject(Subject subject);
     Task<bool> DeleteSubject(int id);
+    Task<IEnumerable<Subject>> GetTeacherSubjects(string teacherId);
 }
