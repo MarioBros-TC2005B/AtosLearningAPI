@@ -61,7 +61,7 @@ namespace AtosLearningAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            await _userRepository.DeleteUser(new User { UserId = id });
+            await _userRepository.DeleteUser(new User { Id = id });
 
             return NoContent(); 
         }

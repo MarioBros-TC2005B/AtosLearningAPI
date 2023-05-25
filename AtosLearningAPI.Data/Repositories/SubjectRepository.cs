@@ -107,8 +107,8 @@ public class SubjectRepository : ISubjectRepository
         try
         {
             db.Open();
-            await db.ExecuteAsync(command, new {id});
-            return true;
+            var result = await db.ExecuteAsync(command, new {id});
+            return result > 0;
         }
         catch (Exception e)
         {
