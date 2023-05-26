@@ -20,7 +20,7 @@ public class SubjectRepository : ISubjectRepository
     public async Task<IEnumerable<Subject>> GetAllSubjects()
     {
         var db = GetConnection();
-        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId FROM Subjects";
+        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId, subject_code Code FROM Subjects";
 
         try
         {
@@ -40,7 +40,7 @@ public class SubjectRepository : ISubjectRepository
     {
         var db = GetConnection();
 
-        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId FROM Subjects WHERE subject_id = @id";
+        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId, subject_code Code FROM Subjects WHERE subject_id = @id";
         
         try
         {
@@ -63,12 +63,12 @@ public class SubjectRepository : ISubjectRepository
     {
         var db = GetConnection();
 
-        var command = "INSERT INTO Subjects (subject_name, teacher_id, course_id) VALUES (@name, @teacherId, @courseId)";
+        var command = "INSERT INTO Subjects (subject_name, teacher_id, course_id, subject_code) VALUES (@name, @teacherId, @courseId, @code)";
         
         try
         {
             db.Open();
-            await db.ExecuteAsync(command, new {name = subject.Name, teacherId = subject.TeacherId, courseId = subject.CourseId});
+            await db.ExecuteAsync(command, new {name = subject.Name, teacherId = subject.TeacherId, courseId = subject.CourseId, code = subject.Code});
             return true;
         }
         catch (Exception e)
@@ -120,7 +120,7 @@ public class SubjectRepository : ISubjectRepository
     public async Task<IEnumerable<Subject>> GetTeacherSubjects(string teacherId)
     {
         var db = GetConnection();
-        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId FROM Subjects WHERE teacher_id = @teacherId";
+        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId, subject_code Code FROM Subjects WHERE teacher_id = @teacherId";
         
         try
         {
@@ -138,6 +138,6 @@ public class SubjectRepository : ISubjectRepository
             throw;
         }
     }
-    
-    
+
+
 }

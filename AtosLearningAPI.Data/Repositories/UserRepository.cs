@@ -40,7 +40,7 @@ namespace AtosLearningAPI.Data.Repositories
         {
             var db = DbConnection();
             
-            var command = "SELECT user_id Id, user_name Name, user_email Email, user_password Password, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users";
+            var command = "SELECT user_id Id, user_name Name, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users";
 
             try
             {
@@ -59,7 +59,7 @@ namespace AtosLearningAPI.Data.Repositories
         {
             var db = DbConnection();
             
-            var command = "SELECT user_id Id, user_name Name, user_email Email, user_password Password, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users WHERE user_id = @id";
+            var command = "SELECT user_id Id, user_name Name, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users WHERE user_id = @id";
 
             try
             {
@@ -111,7 +111,7 @@ namespace AtosLearningAPI.Data.Repositories
             var db = DbConnection();
             
             var command =
-                "INSERT INTO Users (user_name, user_email, user_password, user_nickname, character_id, user_image, user_total_score) VALUES (@name, @email, @password, @nickname, @characterId, @userImage, @totalScore)";
+                "INSERT INTO Users (user_name, user_email, user_nickname, character_id, user_image, user_total_score) VALUES (@name, @email, @nickname, @characterId, @userImage, @totalScore)";
 
             try
             {
@@ -120,7 +120,6 @@ namespace AtosLearningAPI.Data.Repositories
                 {
                     name = user.Name,
                     email = user.Email,
-                    password = user.Password,
                     nickname = user.Nickname,
                     characterId = user.CharacterId,
                     userImage = user.Image,
