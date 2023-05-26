@@ -55,7 +55,9 @@ namespace AtosLearningAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return NoContent(); 
+            var updated = await _userRepository.UpdateUser(user);
+            
+            return Ok(updated);
         }
 
         [HttpDelete]
