@@ -10,52 +10,52 @@ namespace AtosLearningAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IStudentRepository _studentRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(IStudentRepository studentRepository)
+        public UsersController(IUserRepository userRepository)
         {
-            _studentRepository = studentRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet]  
         public async Task<IActionResult> GetAllUsers()
         {
-            return Ok(await _studentRepository.GetAllUsers()); 
+            return Ok(await _userRepository.GetAllUsers()); 
         }
 
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            return Ok(await _studentRepository.GetUserById(id)); 
+            return Ok(await _userRepository.GetUserById(id)); 
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] Student student)
+        public async Task<IActionResult> CreateUser([FromBody] User user)
         {
-            if (student == null)
+            if (user == null)
                 return BadRequest(); 
 
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var created = await _studentRepository.InsertUser(student);
+            var created = await _userRepository.InsertUser(user);
 
             return Created("created", created); 
         }
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] Student student)
+        public async Task<IActionResult> UpdateUser([FromBody] User user)
         {
-            if (student == null)
+            if (user == null)
                 return BadRequest();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var updated = await _studentRepository.UpdateUser(student);
+            var updated = await _userRepository.UpdateUser(user);
             
             return Ok(updated);
         }
@@ -63,7 +63,7 @@ namespace AtosLearningAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            await _studentRepository.DeleteUser(new Student { Id = id });
+            await _userRepository.DeleteUser(new User { Id = id });
 
             return NoContent(); 
         }

@@ -17,9 +17,9 @@ namespace AtosLearningAPI.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] AuthUser user)
+        public async Task<IActionResult> Login([FromForm] String username, [FromForm] String password)
         {
-            return Ok(await _authRepository.Login(user.username, user.password));
+            return Ok(await _authRepository.Login(username, password));
         }
         
     }

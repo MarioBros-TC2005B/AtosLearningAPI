@@ -18,23 +18,22 @@ public class AuthRepository : IAuthRepository
         return new MySqlConnection(_connectionString.ConnectionString); 
     }
     
-    public async Task<Student> Login(string username, string password)
+    public async Task<User> Login(string username, string password)
     {
         var db = DbConnection();
         
         
-        var emailTeacherCommand = "SELECT T.teacher_id Id, teacher_name Name, teacher_email Email FROM Teachers T INNER JOIN User_Auth UA on T.teacher_id = UA.user_id WHERE LOWER(teacher_email) = LOWER(@username) AND user_password = @password";
-        var emailStudentCommand = "SELECT U.student_id Id, student_name Name, student_email Email, student_nickname Nickname, character_id CharacterId, student_image Image, student_total_score TotalScore FROM Students U INNER JOIN User_Auth UA on U.student_id = UA.user_id WHERE LOWER(student_email) = LOWER(@username) AND user_password = @password";
-        var nicknameStudentCommand = "SELECT U.student_id Id, student_name Name, student_email Email, student_nickname Nickname, character_id CharacterId, student_image Image, student_total_score TotalScore FROM Students U INNER JOIN User_Auth UA on U.student_id = UA.user_id WHERE student_nickname = @username AND user_password = @password";
-
+        var emailStudentCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE LOWER(user_email) = LOWER(@username) AND user_password = @password";
+        var nicknameStudentCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE user_nickname = @username AND user_password = @password";
+        
         try
         {
             db.Open();
-            var result = await db.QueryAsync<Student>(emailStudentCommand, new {username, password});
+            var result = await db.QueryAsync<User>(emailStudentCommand, new {username, password});
             var user = result.FirstOrDefault();
             if (user == null)
             {
-                result = await db.QueryAsync<Student>(nicknameStudentCommand, new {username, password});
+                result = await db.QueryAsync<User>(nicknameStudentCommand, new {username, password});
                 user = result.FirstOrDefault();
                 if (user == null)
                     throw new Exception("Correo/Usuario o contraseña incorrectos");

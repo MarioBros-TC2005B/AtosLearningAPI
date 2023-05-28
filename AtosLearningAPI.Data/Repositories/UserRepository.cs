@@ -4,10 +4,10 @@ using MySql.Data.MySqlClient;
 
 namespace AtosLearningAPI.Data.Repositories
 {
-    public class StudentRepository : IStudentRepository
+    public class UserRepository : IUserRepository
     {
         private readonly MySQLConfiguration _connectionString; 
-        public StudentRepository(MySQLConfiguration connectionString)
+        public UserRepository(MySQLConfiguration connectionString)
         {
             _connectionString = connectionString;
         }
@@ -18,15 +18,15 @@ namespace AtosLearningAPI.Data.Repositories
         }
 
 
-        public async Task<bool> DeleteUser(Student student)
+        public async Task<bool> DeleteUser(User user)
         {
             var db = DbConnection();
-            var command = "DELETE FROM Students WHERE student_id = @Id";
+            var command = "DELETE FROM Users WHERE user_id = @Id";
 
             try
             {
                 db.Open();
-                var result = await db.ExecuteAsync(command, new {student.Id});
+                var result = await db.ExecuteAsync(command, new {user.Id});
                 return result > 0;
             }
             catch (Exception e)
@@ -35,17 +35,17 @@ namespace AtosLearningAPI.Data.Repositories
                 throw;
             }
         }
-
-        public async Task<IEnumerable<Student>> GetAllUsers()
+        
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
             var db = DbConnection();
             
-            var command = "SELECT student_id Id, student_name Name, student_email Email, student_nickname Nickname, character_id CharacterId, student_image Image, student_total_score TotalScore FROM Students";
+            var command = "SELECT user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users";
 
             try
             {
                 db.Open();
-                var users = await db.QueryAsync<Student>(command);
+                var users = await db.QueryAsync<User>(command);
                 return users.ToList();
             }
             catch (Exception e)
@@ -55,16 +55,16 @@ namespace AtosLearningAPI.Data.Repositories
             }
         }
 
-        public async Task<Student> GetUserById(int id)
+        public async Task<User> GetUserById(int id)
         {
             var db = DbConnection();
             
-            var command = "SELECT student_id Id, student_name Name, student_email Email, student_nickname Nickname, character_id CharacterId, student_image Image, student_total_score TotalScore FROM Students WHERE student_id = @id";
+            var command = "SELECT user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users WHERE user_id = @id";
 
             try
             {
                 db.Open();
-                var result = await db.QueryAsync<Student>(command, new {id});
+                var result = await db.QueryAsync<User>(command, new {id});
                 var user = result.FirstOrDefault();
                 if (user == null)
                     throw new Exception("User not found");
@@ -78,24 +78,25 @@ namespace AtosLearningAPI.Data.Repositories
             }
         }
 
-        public async Task<bool> UpdateUser(Student student)
+        public async Task<bool> UpdateUser(User user)
         {
             var db = DbConnection();
 
             var command =
-                "UPDATE Students SET student_name = @name, student_nickname = @nickname, character_id = @characterId, student_image = @userImage, student_total_score = @totalScore WHERE student_id = @id";
+                "UPDATE Users SET user_name = @name, user_nickname = @nickname, character_id = @characterId, user_image = @userImage, user_total_score = @totalScore WHERE user_id = @id";
 
             try
             {
                 db.Open();
                 var result = await db.ExecuteAsync(command, new
                 {
-                    name = student.Name,
-                    nickname = student.Nickname,
-                    characterId = student.CharacterId,
-                    userImage = student.Image,
-                    totalScore = student.TotalScore,
-                    id = student.Id
+                    name = user.Name,
+                    surname = user.Surname,
+                    nickname = user.Nickname,
+                    characterId = user.CharacterId,
+                    userImage = user.Image,
+                    totalScore = user.TotalScore,
+                    id = user.Id
                 });
                 return result > 0;
             }
@@ -106,24 +107,24 @@ namespace AtosLearningAPI.Data.Repositories
             }
         }
 
-        public async Task<bool> InsertUser(Student student)
+        public async Task<bool> InsertUser(User user)
         {
             var db = DbConnection();
             
             var command =
-                "INSERT INTO Students (student_name, student_email, student_nickname, character_id, student_image, student_total_score) VALUES (@name, @email, @nickname, @characterId, @userImage, @totalScore)";
+                "INSERT INTO Users (user_name, user_surname, user_email, user_nickname, character_id, user_image, user_total_score) VALUES (@name, @surname, @email, @nickname, @characterId, @userImage, @totalScore)";
 
             try
             {
                 db.Open();
                 var result = await db.ExecuteAsync(command, new
                 {
-                    name = student.Name,
-                    email = student.Email,
-                    nickname = student.Nickname,
-                    characterId = student.CharacterId,
-                    userImage = student.Image,
-                    totalScore = student.TotalScore
+                    name = user.Name,
+                    email = user.Email,
+                    nickname = user.Nickname,
+                    characterId = user.CharacterId,
+                    userImage = user.Image,
+                    totalScore = user.TotalScore
                 });
                 return result > 0;
             }
