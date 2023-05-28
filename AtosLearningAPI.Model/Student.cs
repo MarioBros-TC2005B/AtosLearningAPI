@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AtosLearningAPI.Model
 {
-    public class User
+    public class Student
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -1,5 +1,6 @@
 
 using AtosLearningAPI.Data.Repositories;
+using AtosLearningAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AtosLearningAPI.Controllers
@@ -15,10 +16,10 @@ namespace AtosLearningAPI.Controllers
             _authRepository = authRepository;
         }
         
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(string username, string password)
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] AuthUser user)
         {
-            return Ok(await _authRepository.Login(username, password));
+            return Ok(await _authRepository.Login(user.username, user.password));
         }
         
     }

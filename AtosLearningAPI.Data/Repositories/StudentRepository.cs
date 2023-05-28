@@ -4,10 +4,10 @@ using MySql.Data.MySqlClient;
 
 namespace AtosLearningAPI.Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class StudentRepository : IStudentRepository
     {
         private readonly MySQLConfiguration _connectionString; 
-        public UserRepository(MySQLConfiguration connectionString)
+        public StudentRepository(MySQLConfiguration connectionString)
         {
             _connectionString = connectionString;
         }
@@ -18,15 +18,15 @@ namespace AtosLearningAPI.Data.Repositories
         }
 
 
-        public async Task<bool> DeleteUser(User user)
+        public async Task<bool> DeleteUser(Student student)
         {
             var db = DbConnection();
-            var command = "DELETE FROM Users WHERE user_id = @Id";
+            var command = "DELETE FROM Students WHERE student_id = @Id";
 
             try
             {
                 db.Open();
-                var result = await db.ExecuteAsync(command, new {user.Id});
+                var result = await db.ExecuteAsync(command, new {student.Id});
                 return result > 0;
             }
             catch (Exception e)
@@ -36,16 +36,16 @@ namespace AtosLearningAPI.Data.Repositories
             }
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<Student>> GetAllUsers()
         {
             var db = DbConnection();
             
-            var command = "SELECT user_id Id, user_name Name, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users";
+            var command = "SELECT student_id Id, student_name Name, student_email Email, student_nickname Nickname, character_id CharacterId, student_image Image, student_total_score TotalScore FROM Students";
 
             try
             {
                 db.Open();
-                var users = await db.QueryAsync<User>(command);
+                var users = await db.QueryAsync<Student>(command);
                 return users.ToList();
             }
             catch (Exception e)
@@ -55,16 +55,16 @@ namespace AtosLearningAPI.Data.Repositories
             }
         }
 
-        public async Task<User> GetUserById(int id)
+        public async Task<Student> GetUserById(int id)
         {
             var db = DbConnection();
             
-            var command = "SELECT user_id Id, user_name Name, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore FROM Users WHERE user_id = @id";
+            var command = "SELECT student_id Id, student_name Name, student_email Email, student_nickname Nickname, character_id CharacterId, student_image Image, student_total_score TotalScore FROM Students WHERE student_id = @id";
 
             try
             {
                 db.Open();
-                var result = await db.QueryAsync<User>(command, new {id});
+                var result = await db.QueryAsync<Student>(command, new {id});
                 var user = result.FirstOrDefault();
                 if (user == null)
                     throw new Exception("User not found");
@@ -78,24 +78,24 @@ namespace AtosLearningAPI.Data.Repositories
             }
         }
 
-        public async Task<bool> UpdateUser(User user)
+        public async Task<bool> UpdateUser(Student student)
         {
             var db = DbConnection();
 
             var command =
-                "UPDATE Users SET user_name = @name, user_nickname = @nickname, character_id = @characterId, user_image = @userImage, user_total_score = @totalScore WHERE user_id = @id";
+                "UPDATE Students SET student_name = @name, student_nickname = @nickname, character_id = @characterId, student_image = @userImage, student_total_score = @totalScore WHERE student_id = @id";
 
             try
             {
                 db.Open();
                 var result = await db.ExecuteAsync(command, new
                 {
-                    name = user.Name,
-                    nickname = user.Nickname,
-                    characterId = user.CharacterId,
-                    userImage = user.Image,
-                    totalScore = user.TotalScore,
-                    id = user.Id
+                    name = student.Name,
+                    nickname = student.Nickname,
+                    characterId = student.CharacterId,
+                    userImage = student.Image,
+                    totalScore = student.TotalScore,
+                    id = student.Id
                 });
                 return result > 0;
             }
@@ -106,24 +106,24 @@ namespace AtosLearningAPI.Data.Repositories
             }
         }
 
-        public async Task<bool> InsertUser(User user)
+        public async Task<bool> InsertUser(Student student)
         {
             var db = DbConnection();
             
             var command =
-                "INSERT INTO Users (user_name, user_email, user_nickname, character_id, user_image, user_total_score) VALUES (@name, @email, @nickname, @characterId, @userImage, @totalScore)";
+                "INSERT INTO Students (student_name, student_email, student_nickname, character_id, student_image, student_total_score) VALUES (@name, @email, @nickname, @characterId, @userImage, @totalScore)";
 
             try
             {
                 db.Open();
                 var result = await db.ExecuteAsync(command, new
                 {
-                    name = user.Name,
-                    email = user.Email,
-                    nickname = user.Nickname,
-                    characterId = user.CharacterId,
-                    userImage = user.Image,
-                    totalScore = user.TotalScore
+                    name = student.Name,
+                    email = student.Email,
+                    nickname = student.Nickname,
+                    characterId = student.CharacterId,
+                    userImage = student.Image,
+                    totalScore = student.TotalScore
                 });
                 return result > 0;
             }

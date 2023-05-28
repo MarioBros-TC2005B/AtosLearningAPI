@@ -4,5 +4,5 @@ namespace AtosLearningAPI.Data.Repositories;
 
 public interface IAuthRepository
 {
-    Task<User> Login(string username, string password);
+    Task<Student> Login(string username, string password);
 }
