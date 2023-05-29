@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AtosLearningAPI.Controllers;
 
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class SubjectsController : ControllerBase
 {
