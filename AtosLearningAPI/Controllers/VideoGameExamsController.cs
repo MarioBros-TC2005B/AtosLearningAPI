@@ -20,7 +20,7 @@ namespace AtosLearningAPI.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetUserExams(string userId)
+        public async Task<IActionResult> GetUserExams(int userId)
         {
             return Ok(await _videoGameExamRepository.GetUserExams(userId));
         }

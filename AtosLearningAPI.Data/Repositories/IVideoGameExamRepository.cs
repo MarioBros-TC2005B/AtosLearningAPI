@@ -4,5 +4,5 @@ namespace AtosLearningAPI.Data.Repositories;
 
 public interface IVideoGameExamRepository
 {
-    Task<IEnumerable<VideoGameExam>> GetUserExams(string userId);
+    Task<IEnumerable<VideoGameExam>> GetUserExams(int userId);
 }

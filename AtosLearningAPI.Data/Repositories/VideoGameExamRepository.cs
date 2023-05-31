@@ -15,7 +15,7 @@ public class VideoGameExamRepository : IVideoGameExamRepository
     
     protected MySqlConnection GetConnection() => new MySqlConnection(_mySqlConfiguration.ConnectionString);
     
-    public async Task<IEnumerable<VideoGameExam>> GetUserExams(string userId)
+    public async Task<IEnumerable<VideoGameExam>> GetUserExams(int userId)
     {
         var db = GetConnection();
 
@@ -27,6 +27,7 @@ SELECT
     Exams.exam_description AS Description,
     Exams.due_date AS DueDate,
     Exams.subject_id AS SubjectId,
+    Exams.exam_image as ImageUrl,
     S.subject_name AS SubjectName,
     (SELECT user_name from Users WHERE Users.user_id = S.teacher_id) AS TeacherName,
     (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionCount

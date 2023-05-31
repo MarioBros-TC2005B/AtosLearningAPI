@@ -9,6 +9,7 @@ public class VideoGameExam
     public DateTime DueDate { get; set; }
     public string SubjectName { get; set; }
     public string TeacherName { get; set; }
+    public string ImageUrl { get; set; }
     public int QuestionsCount { get; set; }
     
 }
