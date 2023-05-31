@@ -57,4 +57,43 @@ WHERE
             throw;
         }
     }
+
+    public async Task<IEnumerable<Question>> GetExamQuestions(int examId)
+    {
+        var db = GetConnection();
+
+        try
+        {
+            db.Open();
+            var cmd = @"
+SELECT
+    Q.question_id AS Id,
+    Q.question_title AS Title,
+    Q.exam_id AS ExamId
+FROM Questions Q
+WHERE Q.exam_id = @examId
+";
+            var questions = await db.QueryAsync<Question>(cmd, new {examId});
+            foreach (var question in questions)
+            {
+                var cmd2 = @"
+SELECT
+    A.answer_id AS Id,
+    A.answer_title AS Text,
+    A.is_correct AS IsCorrect
+FROM Answers A
+WHERE A.question_id = @questionId
+";
+                var answers = await db.QueryAsync<Answer>(cmd2, new {questionId = question.Id});
+                question.Answers = answers.ToArray();
+            }
+
+            return questions;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }
