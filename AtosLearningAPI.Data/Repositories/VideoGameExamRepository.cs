@@ -30,7 +30,7 @@ SELECT
     Exams.exam_image as ImageUrl,
     S.subject_name AS SubjectName,
     (SELECT user_name from Users WHERE Users.user_id = S.teacher_id) AS TeacherName,
-    (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionCount
+    (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionsCount
 FROM
     Exams
         INNER JOIN Subjects S ON Exams.subject_id = S.subject_id
