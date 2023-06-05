@@ -17,37 +17,6 @@ public class AuthRepository : IAuthRepository
     {
         return new MySqlConnection(_connectionString.ConnectionString); 
     }
-    
-    public async Task<User> Login(string username, string password)
-    {
-        var db = DbConnection();
-        
-        
-        var emailCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore, is_teacher IsTeacher FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE LOWER(user_email) = LOWER(@username) AND user_password = @password";
-        var nicknameCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore, is_teacher IsTeacher FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE user_nickname = @username AND user_password = @password";
-        
-        try
-        {
-            db.Open();
-            var result = await db.QueryAsync<User>(emailCommand, new {username, password});
-            var user = result.FirstOrDefault();
-            if (user == null)
-            {
-                result = await db.QueryAsync<User>(nicknameCommand, new {username, password});
-                user = result.FirstOrDefault();
-                if (user == null)
-                    throw new Exception("Correo/Usuario o contraseña incorrectos");
-            }
-            
-            return user;
-
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
 
     public async Task<User> Register(User user, string password)
     {
@@ -71,6 +40,37 @@ public class AuthRepository : IAuthRepository
                 throw new Exception("Error al crear el usuario");
 
             return user;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task<User> Login(string username, string password)
+    {
+        var db = DbConnection();
+        
+        
+        var emailCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore, is_teacher IsTeacher FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE LOWER(user_email) = LOWER(@username) AND user_password = @password";
+        var nicknameCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore, is_teacher IsTeacher FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE user_nickname = @username AND user_password = @password";
+        
+        try
+        {
+            db.Open();
+            var result = await db.QueryAsync<User>(emailCommand, new {username, password});
+            var user = result.FirstOrDefault();
+            if (user == null)
+            {
+                result = await db.QueryAsync<User>(nicknameCommand, new {username, password});
+                user = result.FirstOrDefault();
+                if (user == null)
+                    throw new Exception("Correo/Usuario o contraseña incorrectos");
+            }
+            
+            return user;
+
         }
         catch (Exception e)
         {
