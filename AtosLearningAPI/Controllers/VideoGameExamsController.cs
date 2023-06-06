@@ -31,5 +31,19 @@ namespace AtosLearningAPI.Controllers
         {
             return Ok(await _videoGameExamRepository.GetExamQuestions(examId));
         }
+        
+        [HttpGet]
+        [Route("submitted")]
+        public async Task<IActionResult> GetSubmittedExams(int userId)
+        {
+            return Ok(await _videoGameExamRepository.GetSubmittedExams(userId));
+        }
+        
+        [HttpGet]
+        [Route("pending")]
+        public async Task<IActionResult> GetPendingExams(int userId)
+        {
+            return Ok(await _videoGameExamRepository.GetPendingExams(userId));
+        }
     }
 }

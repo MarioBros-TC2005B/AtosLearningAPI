@@ -133,8 +133,25 @@ namespace AtosLearningAPI.Data.Repositories
                 Console.WriteLine(e);
                 throw;
             }
-            
         }
 
+        public async Task<bool> UpdateNickname(int id, string nickname)
+        {
+            var db = DbConnection();
+            
+            var command = "UPDATE Users SET user_nickname = @nickname WHERE user_id = @id";
+            
+            try
+            {
+                db.Open();
+                var result = await db.ExecuteAsync(command, new {nickname, id});
+                return result > 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

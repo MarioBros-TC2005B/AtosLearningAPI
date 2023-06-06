@@ -71,4 +71,5 @@ public class SubjectsController : ControllerBase
     {
         return Ok(await _subjectRepository.GetTeacherSubjects(teacherId));
     }
+    
 }

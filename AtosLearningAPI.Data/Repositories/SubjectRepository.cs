@@ -20,7 +20,11 @@ public class SubjectRepository : ISubjectRepository
     public async Task<IEnumerable<Subject>> GetAllSubjects()
     {
         var db = GetConnection();
-        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId, subject_code Code FROM Subjects";
+        var command = @"SELECT
+ subject_id Id, 
+ subject_name Name,
+ course_id CourseId 
+FROM Subjects";
 
         try
         {
@@ -40,7 +44,11 @@ public class SubjectRepository : ISubjectRepository
     {
         var db = GetConnection();
 
-        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId, subject_code Code FROM Subjects WHERE subject_id = @id";
+        var command = @"SELECT
+ subject_id Id, 
+ subject_name Name,
+ course_id CourseId 
+FROM Subjects WHERE subject_id = @id";
         
         try
         {
@@ -63,12 +71,12 @@ public class SubjectRepository : ISubjectRepository
     {
         var db = GetConnection();
 
-        var command = "INSERT INTO Subjects (subject_name, teacher_id, course_id, subject_code) VALUES (@name, @teacherId, @courseId, @code)";
+        var command = "INSERT INTO Subjects (subject_name, course_id) VALUES (@name, @courseId)";
         
         try
         {
             db.Open();
-            await db.ExecuteAsync(command, new {name = subject.Name, teacherId = subject.TeacherId, courseId = subject.CourseId, code = subject.Code});
+            await db.ExecuteAsync(command, new {name = subject.Name, courseId = subject.CourseId});
             return true;
         }
         catch (Exception e)
@@ -83,12 +91,12 @@ public class SubjectRepository : ISubjectRepository
     {
         var db = GetConnection();
         
-        var command = "UPDATE Subjects SET subject_name = @name, teacher_id = @teacherId, course_id = @courseId WHERE subject_id = @id";
+        var command = "UPDATE Subjects SET subject_name = @name, course_id = @courseId WHERE subject_id = @id";
 
         try
         {
             db.Open();
-            await db.ExecuteAsync(command, new {name = subject.Name, teacherId = subject.TeacherId, courseId = subject.CourseId, id = subject.Id});
+            await db.ExecuteAsync(command, new {name = subject.Name, courseId = subject.CourseId, id = subject.Id});
             return true;
         }
         catch (Exception e)
@@ -120,7 +128,7 @@ public class SubjectRepository : ISubjectRepository
     public async Task<IEnumerable<Subject>> GetTeacherSubjects(string teacherId)
     {
         var db = GetConnection();
-        var command = "SELECT subject_id Id, subject_name Name, teacher_id TeacherId, course_id CourseId, subject_code Code FROM Subjects WHERE teacher_id = @teacherId";
+        var command = "SELECT S.subject_id Id, S.subject_name Name, S.course_id CourseId FROM Subjects S INNER JOIN Courses ON S.course_id = Courses.course_id WHERE Courses.teacher_id = @teacherId";
         
         try
         {
@@ -138,6 +146,6 @@ public class SubjectRepository : ISubjectRepository
             throw;
         }
     }
-
+    
 
 }

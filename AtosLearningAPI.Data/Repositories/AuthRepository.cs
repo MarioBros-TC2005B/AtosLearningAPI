@@ -21,7 +21,7 @@ public class AuthRepository : IAuthRepository
     public async Task<User> Register(User user, string password)
     {
         var db = DbConnection();
-        
+
         var command = "INSERT INTO Users (user_name, user_surname, user_email, user_nickname, character_id, user_image, user_total_score, is_teacher) VALUES (@Name, @Surname, @Email, @Nickname, @CharacterId, @Image, @TotalScore, @IsTeacher)";
         var authCommand = "INSERT INTO User_Auth (user_id, user_password) VALUES (@Id, @Password)";
         
@@ -38,6 +38,17 @@ public class AuthRepository : IAuthRepository
             var authResult = await db.ExecuteAsync(authCommand, new {Id = user.Id, Password = password});
             if (authResult == 0)
                 throw new Exception("Error al crear el usuario");
+
+            if (user.IsTeacher)
+            {
+                // Create new course
+                var courseCommand = "INSERT INTO Courses (course_name, teacher_id, course_code) VALUES (@Name, @TeacherId, @Code)";
+                // Generate 5 character alphanumeric course code
+                var courseCode = Guid.NewGuid().ToString().Substring(0, 5);
+                var courseResult = await db.ExecuteAsync(courseCommand, new {Name = "Curso de " + user.Name, TeacherId = user.Id, Code = courseCode});
+                if (courseResult == 0)
+                    throw new Exception("Error al crear el curso");
+            }
 
             return user;
         }

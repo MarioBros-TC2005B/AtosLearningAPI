@@ -29,13 +29,13 @@ SELECT
     Exams.subject_id AS SubjectId,
     Exams.exam_image as ImageUrl,
     S.subject_name AS SubjectName,
-    (SELECT user_name from Users WHERE Users.user_id = S.teacher_id) AS TeacherName,
+    (SELECT user_name from Users WHERE Users.user_id = Courses.teacher_id) AS TeacherName,
     (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionsCount
 FROM
     Exams
         INNER JOIN Subjects S ON Exams.subject_id = S.subject_id
-        INNER JOIN Users T ON S.teacher_id = T.user_id
         INNER JOIN Courses ON S.course_id = Courses.course_id
+        INNER JOIN Users T ON Courses.teacher_id = T.user_id
         INNER JOIN Course_Users ON Courses.course_id = Course_Users.course_id
         INNER JOIN Users U ON Course_Users.user_id = U.user_id
 WHERE
@@ -69,7 +69,8 @@ WHERE
 SELECT
     Q.question_id AS Id,
     Q.question_title AS Title,
-    Q.exam_id AS ExamId
+    Q.exam_id AS ExamId,
+    Q.time_limit AS TimeLimit
 FROM Questions Q
 WHERE Q.exam_id = @examId
 ";
@@ -89,6 +90,84 @@ WHERE A.question_id = @questionId
             }
 
             return questions;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task<IEnumerable<VideoGameExam>> GetSubmittedExams(int userId)
+    {
+        var db = GetConnection();
+        
+        db.Open();
+
+        var cmd = @"
+SELECT
+    Exams.exam_id AS Id,
+    Exams.exam_title AS Title,
+    Exams.exam_description AS Description,
+    Exams.due_date AS DueDate,
+    Exams.subject_id AS SubjectId,
+    Exams.exam_image as ImageUrl,
+    S.subject_name AS SubjectName,
+    (SELECT user_name from Users WHERE Users.user_id = C.teacher_id) AS TeacherName
+FROM
+    Exams
+INNER JOIN
+    Subjects S ON Exams.subject_id = S.subject_id
+INNER JOIN
+        Courses C on S.course_id = C.course_id
+INNER JOIN
+    Exam_Submissions ES ON Exams.exam_id = ES.exam_id
+WHERE
+    ES.user_id = @userId
+";
+        
+        try
+        {
+            var exams = await db.QueryAsync<VideoGameExam>(cmd, new {userId});
+            return exams.ToList();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
+    public async Task<IEnumerable<VideoGameExam>> GetPendingExams(int userId)
+    {
+        var db = GetConnection();
+        
+        db.Open();
+
+        var cmd = @"
+SELECT
+    Exams.exam_id AS Id,
+    Exams.exam_title AS Title,
+    Exams.exam_description AS Description,
+    Exams.due_date AS DueDate,
+    Exams.subject_id AS SubjectId,
+    Exams.exam_image as ImageUrl,
+    S.subject_name AS SubjectName,
+    (SELECT user_name from Users WHERE Users.user_id = C.teacher_id) AS TeacherName
+FROM
+    Exams
+INNER JOIN
+    Subjects S ON Exams.subject_id = S.subject_id
+INNER JOIN
+    Courses C on S.course_id = C.course_id
+WHERE
+    Exams.exam_id NOT IN (SELECT exam_id FROM Exam_Submissions WHERE user_id = @userId)
+";
+        
+        try
+        {
+            var exams = await db.QueryAsync<VideoGameExam>(cmd, new {userId});
+            return exams.ToList();
         }
         catch (Exception e)
         {

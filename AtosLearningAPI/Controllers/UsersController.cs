@@ -67,5 +67,16 @@ namespace AtosLearningAPI.Controllers
 
             return NoContent(); 
         }
+        
+        [HttpPut]
+        [Route("updateNickname")]
+        public async Task<IActionResult> UpdateNickname([FromForm] int userId, [FromForm] string nickname)
+        {
+            if (userId == 0 || nickname == null)
+                return BadRequest();
+
+            var updated = await _userRepository.UpdateNickname(userId, nickname);
+            return Ok(updated);
+        }
     }
 }

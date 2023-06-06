@@ -13,6 +13,7 @@ namespace AtosLearningAPI.Data.Repositories
         Task<User> GetUserById(int id);
         Task<bool> InsertUser(User user);
         Task<bool> UpdateUser(User user);
-        Task<bool> DeleteUser(User user); 
+        Task<bool> DeleteUser(User user);
+        Task<bool> UpdateNickname(int id, string nickname);
     }
 }
