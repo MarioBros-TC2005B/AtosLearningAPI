@@ -113,7 +113,8 @@ SELECT
     Exams.subject_id AS SubjectId,
     Exams.exam_image as ImageUrl,
     S.subject_name AS SubjectName,
-    (SELECT user_name from Users WHERE Users.user_id = C.teacher_id) AS TeacherName
+    (SELECT user_name from Users WHERE Users.user_id = C.teacher_id) AS TeacherName,
+    (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionsCount
 FROM
     Exams
 INNER JOIN
@@ -153,7 +154,8 @@ SELECT
     Exams.subject_id AS SubjectId,
     Exams.exam_image as ImageUrl,
     S.subject_name AS SubjectName,
-    (SELECT user_name from Users WHERE Users.user_id = C.teacher_id) AS TeacherName
+    (SELECT user_name from Users WHERE Users.user_id = C.teacher_id) AS TeacherName,
+    (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionsCount
 FROM
     Exams
 INNER JOIN
