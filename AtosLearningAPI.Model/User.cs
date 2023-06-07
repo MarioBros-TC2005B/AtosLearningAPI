@@ -17,6 +17,7 @@ namespace AtosLearningAPI.Model
         public string Image { get; set; }
         public float? TotalScore { get; set; }
         public bool IsTeacher { get; set; }
+        public Course Course { get; set; }
 
     }
 }

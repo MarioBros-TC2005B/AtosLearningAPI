@@ -64,7 +64,23 @@ public class AuthRepository : IAuthRepository
         var db = DbConnection();
         
         
-        var emailCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore, is_teacher IsTeacher FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE LOWER(user_email) = LOWER(@username) AND user_password = @password";
+        var emailCommand = @"SELECT 
+    U.user_id Id, 
+    user_name Name,
+    user_surname Surname, 
+    user_email Email, 
+    user_nickname Nickname,
+    character_id CharacterId,
+    user_image Image, 
+    user_total_score TotalScore,
+    is_teacher IsTeacher
+FROM Users U
+    INNER JOIN 
+    User_Auth UA on U.user_id = UA.user_id 
+WHERE 
+    LOWER(user_email) = LOWER(@username)
+  AND 
+    user_password = @password";
         var nicknameCommand = "SELECT U.user_id Id, user_name Name, user_surname Surname, user_email Email, user_nickname Nickname, character_id CharacterId, user_image Image, user_total_score TotalScore, is_teacher IsTeacher FROM Users U INNER JOIN User_Auth UA on U.user_id = UA.user_id WHERE user_nickname = @username AND user_password = @password";
         
         try
@@ -78,6 +94,19 @@ public class AuthRepository : IAuthRepository
                 user = result.FirstOrDefault();
                 if (user == null)
                     throw new Exception("Correo/Usuario o contraseña incorrectos");
+            }
+
+            if (user.IsTeacher)
+            {
+                var courseCommand = "SELECT course_id Id, course_name Name, teacher_id TeacherId, course_code Code FROM Courses WHERE teacher_id = @Id";
+                var courseResult = await db.QueryAsync<Course>(courseCommand, new {Id = user.Id});
+                user.Course = courseResult.FirstOrDefault();
+            }
+            else
+            {
+                var courseCommand = "SELECT C.course_id Id, course_name Name, teacher_id TeacherId, course_code Code FROM Courses C INNER JOIN Course_Users CU on C.course_id = CU.course_id WHERE CU.user_id = @Id";
+                var courseResult = await db.QueryAsync<Course>(courseCommand, new {Id = user.Id});
+                user.Course = courseResult.FirstOrDefault();
             }
             
             return user;
