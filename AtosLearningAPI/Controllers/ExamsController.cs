@@ -20,13 +20,14 @@ namespace AtosLearningAPI.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> SubmitExam([FromForm] int userId, [FromForm] int[] answersIds, [FromForm] int examId, [FromForm] float score, [FromForm] DateTime startDateTime)
+        public async Task<IActionResult> SubmitExam([FromForm] int userId, [FromForm] int[] answersIds, [FromForm] int examId, [FromForm] string score, [FromForm] DateTime startDateTime)
             {
+                var floatScore = float.Parse(score);
             if (userId == null || answersIds == null || answersIds.Length == 0)
                 return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(await _examRepository.SubmitExam(userId, answersIds, examId, score, startDateTime));
+            return Ok(await _examRepository.SubmitExam(userId, answersIds, examId, floatScore, startDateTime));
         }
         
         [HttpDelete]
