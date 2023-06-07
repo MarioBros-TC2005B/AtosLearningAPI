@@ -28,6 +28,16 @@ namespace AtosLearningAPI.Controllers
                 return BadRequest(ModelState);
             return Ok(await _examRepository.SubmitExam(userId, answersIds, examId, score, startDateTime));
         }
+        
+        [HttpDelete]
+        public async Task<IActionResult> DeleteExamSubmission([FromForm] int userId, [FromForm] int examId)
+        {
+            if (userId == null || examId == null)
+                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(await _examRepository.DeleteExamSubmission(userId, examId));
+        }
 
     }
 }

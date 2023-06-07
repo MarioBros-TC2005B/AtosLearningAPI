@@ -26,8 +26,8 @@ public class ExamRepository : IExamRepository
         {
             foreach (var answerId in answersIds)
             {
-                var command = "INSERT INTO Submitted_Answers (user_id, answer_id) VALUES (@studentId, @answerId)";
-                await db.ExecuteAsync(command, new {studentId, answerId}, transaction);
+                var command = "INSERT INTO Submitted_Answers (user_id, answer_id, exam_id) VALUES (@studentId, @answerId, @examId)";
+                await db.ExecuteAsync(command, new {studentId, answerId, examId}, transaction);
             }
             
             var command1 = "INSERT INTO Exam_Submissions (user_id, exam_id, start_time, exam_score) VALUES (@studentId, @examId,  @startDateTime, @score)";
@@ -38,6 +38,32 @@ public class ExamRepository : IExamRepository
             await transaction.CommitAsync();
             return true;
 
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task<bool> DeleteExamSubmission(int studentId, int examId)
+    {
+        var db = GetConnection();
+        
+        db.Open();
+        var transaction = await db.BeginTransactionAsync();
+
+        try
+        {
+            var command1 = "DELETE FROM Submitted_Answers WHERE user_id = @studentId AND exam_id = @examId";
+            var command2 = "DELETE FROM Exam_Submissions WHERE user_id = @studentId AND exam_id = @examId";
+            
+            await db.ExecuteAsync(command1, new {studentId, examId}, transaction);
+            await db.ExecuteAsync(command2, new {studentId, examId}, transaction);
+            
+            await transaction.CommitAsync();
+            return true;
         }
         catch (Exception e)
         {
