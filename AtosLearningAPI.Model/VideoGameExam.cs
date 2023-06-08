@@ -11,5 +11,6 @@ public class VideoGameExam
     public string TeacherName { get; set; }
     public string ImageUrl { get; set; }
     public int QuestionsCount { get; set; }
+    public int? Score { get; set; }
     
 }
