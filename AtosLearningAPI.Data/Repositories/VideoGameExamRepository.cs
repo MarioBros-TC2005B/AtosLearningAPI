@@ -30,7 +30,9 @@ SELECT
     Exams.exam_image as ImageUrl,
     S.subject_name AS SubjectName,
     (SELECT user_name from Users WHERE Users.user_id = Courses.teacher_id) AS TeacherName,
-    (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionsCount
+    (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionsCount,
+    (SELECT exam_score FROM Exam_Submissions ES WHERE ES.exam_id = Exams.exam_id AND ES.user_id = @userId) AS Score,
+    (SELECT end_date_time FROM Exam_Submissions ES WHERE ES.exam_id = Exams.exam_id AND ES.user_id = @userId) AS EndDateTime
 FROM
     Exams
         INNER JOIN Subjects S ON Exams.subject_id = S.subject_id
@@ -115,7 +117,8 @@ SELECT
     S.subject_name AS SubjectName,
     (SELECT user_name from Users WHERE Users.user_id = C.teacher_id) AS TeacherName,
     (SELECT COUNT(*) FROM Questions WHERE Questions.exam_id = Exams.exam_id) AS QuestionsCount,
-    ES.exam_score AS Score
+    ES.exam_score AS Score,
+    ES.end_date_time AS EndDateTime
 FROM
     Exams
 INNER JOIN

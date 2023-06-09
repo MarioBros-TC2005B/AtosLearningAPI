@@ -15,7 +15,7 @@ public class ExamRepository : IExamRepository
     
     protected MySqlConnection GetConnection() => new MySqlConnection(_mySqlConfiguration.ConnectionString);
 
-    public async Task<bool> SubmitExam(int studentId, int[] answersIds, int examId, float score, DateTime startDateTime)
+    public async Task<bool> SubmitExam(int studentId, int[] answersIds, int examId, float score, DateTime endDateTime)
     {
         var db = GetConnection();
         
@@ -30,9 +30,9 @@ public class ExamRepository : IExamRepository
                 await db.ExecuteAsync(command, new {studentId, answerId, examId}, transaction);
             }
             
-            var command1 = "INSERT INTO Exam_Submissions (user_id, exam_id, start_time, exam_score) VALUES (@studentId, @examId,  @startDateTime, @score)";
+            var command1 = "INSERT INTO Exam_Submissions (user_id, exam_id, end_date_time, exam_score) VALUES (@studentId, @examId,  @endDateTime, @score)";
             var command2 = "UPDATE Users SET user_total_score = user_total_score + @score WHERE user_id = @studentId";
-            await db.ExecuteAsync(command1, new {studentId, examId, startDateTime, score}, transaction);
+            await db.ExecuteAsync(command1, new {studentId, examId, endDateTime, score}, transaction);
             await db.ExecuteAsync(command2, new {score, studentId}, transaction);
 
             await transaction.CommitAsync();

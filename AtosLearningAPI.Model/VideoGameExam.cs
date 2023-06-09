@@ -12,5 +12,6 @@ public class VideoGameExam
     public string ImageUrl { get; set; }
     public int QuestionsCount { get; set; }
     public int? Score { get; set; }
+    public DateTime? EndDateTime { get; set; }
     
 }
