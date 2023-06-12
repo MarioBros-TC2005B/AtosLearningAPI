@@ -165,7 +165,7 @@ VALUES
         var db = GetConnection();
         
         db.Open();
-        var transaction = db.BeginTransaction();
+        var transaction = await db.BeginTransactionAsync();
         
         try
         {
