@@ -1,5 +1,6 @@
 using AtosLearningAPI.Data;
 using AtosLearningAPI.Data.Repositories;
+using AtosLearningAPI.Model;
 using MySql.Data.MySqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IVideoGameExamRepository, VideoGameExamRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
+builder.Services.AddScoped<IExamSubmissionRepository, ExamSubmissionRepository>();
 
 var app = builder.Build();
 

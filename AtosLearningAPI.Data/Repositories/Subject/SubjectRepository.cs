@@ -128,7 +128,7 @@ FROM Subjects WHERE subject_id = @id";
     public async Task<IEnumerable<Subject>> GetTeacherSubjects(string teacherId)
     {
         var db = GetConnection();
-        var command = "SELECT S.subject_id Id, S.subject_name Name, S.course_id CourseId FROM Subjects S INNER JOIN Courses ON S.course_id = Courses.course_id WHERE Courses.teacher_id = @teacherId";
+        var command = "SELECT S.subject_id Id, S.subject_name Name, S.subject_description Description, S.course_id CourseId FROM Subjects S INNER JOIN Courses ON S.course_id = Courses.course_id WHERE Courses.teacher_id = @teacherId";
         
         try
         {
