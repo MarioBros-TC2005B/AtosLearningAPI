@@ -1,5 +1,6 @@
 using AtosLearningAPI.Data;
 using AtosLearningAPI.Data.Repositories;
+using AtosLearningAPI.Data.Repositories.QuestionStat;
 using AtosLearningAPI.Model;
 using MySql.Data.MySqlClient;
 
@@ -24,15 +25,13 @@ builder.Services.AddScoped<IVideoGameExamRepository, VideoGameExamRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IExamRepository, ExamRepository>();
 builder.Services.AddScoped<IExamSubmissionRepository, ExamSubmissionRepository>();
+builder.Services.AddScoped<IQuestionStatRepository, QuestionStatRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
