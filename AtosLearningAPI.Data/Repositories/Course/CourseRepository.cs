@@ -38,7 +38,7 @@ public class CourseRepository : ICourseRepository
             command = "SELECT user_id Id FROM Course_Users WHERE user_id = @studentId AND course_id = @courseId";
             var studentSubject = await db.QueryFirstOrDefaultAsync<string>(command, new {studentId, courseId});
             if (studentSubject != null)
-                throw new Exception("Student already in subject");
+                throw new Exception("Student already in course");
             
             // Add student to course
             command = "INSERT INTO Course_Users (user_id, course_id) VALUES (@studentId, @courseId)";
