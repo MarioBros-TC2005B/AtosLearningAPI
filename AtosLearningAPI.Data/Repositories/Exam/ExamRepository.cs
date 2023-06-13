@@ -103,6 +103,37 @@ FROM Exams E
         }
     }
 
+    public async Task<Exam> GetExamById(int id)
+    {
+        var db = GetConnection();
+        
+        db.Open();
+
+        try
+        {
+            var command = @"
+SELECT
+exam_id Id, 
+    exam_title Title, 
+    exam_description Description,
+    due_date DueDate,
+    exam_image ImageUrl,
+    E.subject_id SubjectId
+FROM Exams E
+    INNER JOIN Subjects S ON E.subject_id = S.subject_id
+WHERE exam_id = @id
+";
+            
+            var result = await db.QueryFirstOrDefaultAsync<Exam>(command, new {id});
+            return result;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     public async Task<bool> AddExam(Exam exam, List<Question> questions)
     {
         var db = GetConnection();

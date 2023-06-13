@@ -46,6 +46,12 @@ namespace AtosLearningAPI.Controllers
         {
             return Ok(await _examRepository.GetExams());
         }
+        
+        [HttpGet("{id}")]
+        public async Task<Exam> GetExam(int id)
+        {
+            return await _examRepository.GetExamById(id);
+        }
 
         [HttpPost("add")]
         public async Task<IActionResult> AddExam([FromForm] Exam exam, [FromForm] List<Question> questions)

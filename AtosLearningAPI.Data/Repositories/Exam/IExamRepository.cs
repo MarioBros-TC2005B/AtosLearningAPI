@@ -7,6 +7,7 @@ public interface IExamRepository
     Task<bool> SubmitExam(int studentId, int[] answersIds, int examId, float score, DateTime endDateTime);
     Task<bool> DeleteExamSubmission(int studentId, int examId);
     Task<IEnumerable<Exam>> GetExams();
+    Task<Exam> GetExamById(int id);
     Task<bool> AddExam(Exam exam, List<Question> questions);
     Task<bool> DeleteExam(int id);
     Task<IEnumerable<Exam>> GetExamsBySubject(int subjectId);
