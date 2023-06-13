@@ -147,5 +147,35 @@ FROM Subjects WHERE subject_id = @id";
         }
     }
     
+    public async Task<IEnumerable<Subject>> GetStudentSubjects(string studentId)
+    {
+        var db = GetConnection();
+        var command = @"SELECT
+ S.subject_id Id,
+ S.subject_name Name,
+ S.subject_description Description,
+ S.course_id CourseId
+FROM Subjects S 
+        INNER JOIN Course_Users CU
+            ON S.course_id = CU.course_id 
+WHERE CU.user_id = @studentId";
+        
+        try
+        {
+            db.Open();
+            var subjects = await db.QueryAsync<Subject>(command, new {studentId});
+            var subjectList = subjects.ToList();
+            if (subjectList.Count == 0)
+                throw new Exception("No subjects found for this student");
+            
+            return subjectList;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
 
 }

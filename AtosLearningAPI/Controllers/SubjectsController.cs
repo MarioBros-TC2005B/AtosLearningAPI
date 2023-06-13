@@ -72,4 +72,10 @@ public class SubjectsController : ControllerBase
         return Ok(await _subjectRepository.GetTeacherSubjects(teacherId));
     }
     
+    [HttpGet("student/{studentId}")]
+    public async Task<IActionResult> GetStudentSubjects(string studentId)
+    {
+        return Ok(await _subjectRepository.GetStudentSubjects(studentId));
+    }
+    
 }
