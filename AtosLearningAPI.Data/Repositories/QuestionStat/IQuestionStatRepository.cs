@@ -12,5 +12,5 @@ public interface IQuestionStatRepository
     
     Task<IEnumerable<ExamSubmission>> GetSubmissionsByExam(int examId);
     
-    Task<IEnumerable<ExamSubmission>> GetExamSubmissionByUser(int examId, int userId);
+    Task<ExamSubmission> GetExamSubmissionByUser(int examId, int userId);
 }

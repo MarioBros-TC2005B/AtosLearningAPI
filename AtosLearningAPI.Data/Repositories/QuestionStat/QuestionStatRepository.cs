@@ -153,7 +153,7 @@ FROM Exam_Submissions ES
         }
     }
 
-    public async Task<IEnumerable<ExamSubmission>> GetExamSubmissionByUser(int examId, int userId)
+    public async Task<ExamSubmission> GetExamSubmissionByUser(int examId, int userId)
     {
         var db = GetConnection();
 
@@ -175,7 +175,8 @@ WHERE
 ";
 
             var result = await db.QueryAsync<ExamSubmission>(command, new { examId, userId });
-            return result;
+            var examSubmission = result.FirstOrDefault();
+            return examSubmission;
         }
         catch (Exception e)
         {
