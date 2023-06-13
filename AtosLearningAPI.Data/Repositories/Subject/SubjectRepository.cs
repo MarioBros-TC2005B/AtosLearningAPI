@@ -71,12 +71,12 @@ FROM Subjects WHERE subject_id = @id";
     {
         var db = GetConnection();
 
-        var command = "INSERT INTO Subjects (subject_name, course_id) VALUES (@name, @courseId)";
+        var command = "INSERT INTO Subjects (subject_name, subject_description, course_id) VALUES (@name, @description, @courseId)";
         
         try
         {
             db.Open();
-            await db.ExecuteAsync(command, new {name = subject.Name, courseId = subject.CourseId});
+            await db.ExecuteAsync(command, new {name = subject.Name, description = subject.Description, courseId = subject.CourseId});
             return true;
         }
         catch (Exception e)
