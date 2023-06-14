@@ -173,6 +173,7 @@ WHERE
         try
         {
             var exams = await db.QueryAsync<VideoGameExam>(cmd, new {userId});
+            exams = exams.Where(e => e.DueDate > DateTime.Now);
             return exams.ToList();
         }
         catch (Exception e)
