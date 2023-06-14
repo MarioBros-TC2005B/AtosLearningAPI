@@ -59,26 +59,37 @@ GROUP BY
         {
             var command = @"
 SELECT
-  user_id Id,
-  user_name Name,
-  user_surname Surname,
-  user_email Email,
-  user_nickname Nickname,
-  character_id CharacterId, 
-  user_image Image,
-  user_total_score TotalScore
+    U.user_id AS Id,
+    U.user_name AS Name,
+    U.user_surname AS Surname,
+    U.user_email AS Email,
+    U.user_nickname AS Nickname,
+    U.character_id AS CharacterId,
+    U.user_image AS Image,
+    U.user_total_score AS TotalScore
 FROM
-  Users AS U
+    Users AS U
+        JOIN Course_Users AS CU ON U.user_id = CU.user_id
 WHERE
-  U.user_id NOT IN (
-    SELECT DISTINCT
-      ES.user_id
+        U.user_id NOT IN (
+        SELECT DISTINCT
+            ES.user_id
+        FROM
+            Exam_Submissions AS ES
+        WHERE
+                ES.exam_id = @examId
+    )
+  AND U.is_teacher = 0
+  AND CU.course_id = (
+    SELECT
+        C.course_id
     FROM
-      Exam_Submissions AS ES
+        Exams AS E
+            JOIN Subjects AS S ON E.subject_id = S.subject_id
+            JOIN Courses AS C ON S.course_id = C.course_id
     WHERE
-      ES.exam_id = @examId
-  )
-  AND U.is_teacher = 0;
+            E.exam_id = @examId
+)
 ";
             var users = await db.QueryAsync<User>(command, new {examId});
             return users;
