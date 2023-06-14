@@ -4,5 +4,5 @@ namespace AtosLearningAPI.Data.Repositories;
 
 public interface ICourseRepository
 {
-    Task<bool> JoinCourse(string studentId, string code);
+    Task<Course> JoinCourse(int studentId, string code);
 }

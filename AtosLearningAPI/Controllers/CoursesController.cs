@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AtosLearning.Models;
 using AtosLearningAPI.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,13 +21,13 @@ namespace AtosLearningAPI.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> JoinCourse(string code, string studentId)
+        public async Task<IActionResult> JoinCourse([FromBody] StudentCourseDTO dto)
         {
-            if (code == null)
+            if (dto.CourseCode == null || dto.StudentId == null)
                 return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(await _courseRepository.JoinCourse(studentId, code));
+            return Ok(await _courseRepository.JoinCourse(dto.StudentId, dto.CourseCode));
         }
         
     }

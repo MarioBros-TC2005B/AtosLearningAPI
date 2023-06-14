@@ -15,7 +15,7 @@ public class CourseRepository : ICourseRepository
     
     protected MySqlConnection GetConnection() => new MySqlConnection(_mySQLConfiguration.ConnectionString);
     
-    public async Task<bool> JoinCourse(string studentId, string code)
+    public async Task<Course> JoinCourse(int studentId, string code)
     {
         
         // Check if course and student exist
@@ -43,7 +43,11 @@ public class CourseRepository : ICourseRepository
             // Add student to course
             command = "INSERT INTO Course_Users (user_id, course_id) VALUES (@studentId, @courseId)";
             await db.ExecuteAsync(command, new {studentId, courseId});
-            return true;
+            
+            // Get course data
+            command = "SELECT course_id Id, course_name Name, teacher_id TeacherId, course_code Code FROM Courses WHERE course_id = @courseId";
+            var course = await db.QueryFirstOrDefaultAsync<Course>(command, new {courseId});
+            return course;
         }
         catch (Exception e)
         {
