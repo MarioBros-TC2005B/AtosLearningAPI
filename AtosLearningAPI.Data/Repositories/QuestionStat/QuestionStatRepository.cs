@@ -141,6 +141,8 @@ SELECT
     ES.end_date_time Date
 FROM Exam_Submissions ES
     INNER JOIN Users S ON ES.user_id = S.user_id
+WHERE
+    ES.exam_id = @examId
 ";
 
             var result = await db.QueryAsync<ExamSubmission>(command, new { examId });
