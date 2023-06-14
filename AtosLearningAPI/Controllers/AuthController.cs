@@ -24,12 +24,29 @@ namespace AtosLearningAPI.Controllers
         
         
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] User user, [FromForm] String password)
+        public async Task<IActionResult> Register(
+            [FromForm] string name,
+            [FromForm] string surname,
+            [FromForm] string email,
+            [FromForm] string password,
+            [FromForm] bool isTeacher
+        )
         {
-            if (user == null)
+            if (name == null || surname == null || email == null || password == null || isTeacher == null)
                 return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            var user = new User()
+            {
+                Id = 0,
+                Name = name,
+                Surname = surname,
+                Email = email,
+                IsTeacher = isTeacher,
+                TotalScore = 0,
+                Course = null,
+                Nickname = email
+            };
             var created = await _authRepository.Register(user, password);
 
             return Created("created", created);
