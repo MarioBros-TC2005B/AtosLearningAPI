@@ -134,7 +134,7 @@ WHERE exam_id = @id
         }
     }
 
-    public async Task<bool> AddExam(Exam exam, List<Question> questions)
+    public async Task<bool> AddExam(Exam exam)
     {
         var db = GetConnection();
         
@@ -163,19 +163,21 @@ VALUES
     (@Title, @QuestionId, @IsCorrect)
 ";
             
-            var examId = await db.ExecuteScalarAsync<int>(examCommand, exam, transaction);
-            
+            await db.ExecuteScalarAsync<int>(examCommand, exam, transaction);
+            // get exam id
+            var examId = db.QueryFirstOrDefault<int>("SELECT LAST_INSERT_ID()", transaction);
             
 
-            foreach (var question in questions)
+            foreach (var question in exam.Questions)
             {
-                var questionId = await db.ExecuteScalarAsync<int>(questionCommand,
+                await db.ExecuteScalarAsync<int>(questionCommand,
                     new { question.Title, ExamId = examId, question.TimeLimit }, transaction);
+                var questionId = db.QueryFirstOrDefault<int>("SELECT LAST_INSERT_ID()", transaction);
 
                 foreach (var answer in question.Answers)
                 {
                     await db.ExecuteAsync(answerCommand,
-                        new { answer.Text, QuestionId = questionId, answer.IsCorrect }, transaction);
+                        new { Title = answer.Text, QuestionId = questionId, IsCorrect = answer.IsCorrect }, transaction);
                 }
 
             }
@@ -204,9 +206,9 @@ VALUES
             var command2 = "DELETE FROM Questions WHERE exam_id = @id";
             var command3 = "DELETE FROM Answers WHERE question_id IN (SELECT question_id FROM Questions WHERE exam_id = @id)";
             
-            await db.ExecuteAsync(command1, new {id}, transaction);
-            await db.ExecuteAsync(command2, new {id}, transaction);
             await db.ExecuteAsync(command3, new {id}, transaction);
+            await db.ExecuteAsync(command2, new {id}, transaction);
+            await db.ExecuteAsync(command1, new {id}, transaction);
             
             await transaction.CommitAsync();
             return true;

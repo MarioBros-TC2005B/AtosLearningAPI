@@ -54,13 +54,13 @@ namespace AtosLearningAPI.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddExam([FromForm] Exam exam, [FromForm] List<Question> questions)
+        public async Task<IActionResult> AddExam([FromBody] Exam exam)
         {
-            if (exam == null || questions == null)
+            if (exam == null || exam.Questions.Length == 0)
                 return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var created = await _examRepository.AddExam(exam, questions);
+            var created = await _examRepository.AddExam(exam);
 
             return Created("created", created);
         }
